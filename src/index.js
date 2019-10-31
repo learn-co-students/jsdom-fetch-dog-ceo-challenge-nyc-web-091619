@@ -1,11 +1,25 @@
 console.log('%c HI', 'color: firebrick')
 const imgUrl = "https://dog.ceo/api/breeds/image/random/4"
 const breedUrl = 'https://dog.ceo/api/breeds/list/all'
-
+// helper methods
 function updateColor(e) {
     e.target.style.color = "firebrick"
 }
 
+function creatingLi(breed){
+    let li = document.createElement('li')
+    li.innerText = `${breed}`
+    li.addEventListener('click', updateColor)
+    return li
+}
+
+function removingChildren(ul){
+    while( ul.firstChild ){
+        ul.removeChild( ul.firstChild )
+    }
+}
+
+// important methods
 function fetchDogs() {
     fetch(imgUrl)
     .then(resp => resp.json())
@@ -33,22 +47,14 @@ function renderBreeds(json) {
     const dropdown = document.getElementById("breed-dropdown")
     let breedsArray = Object.keys(json.message)
     breedsArray.forEach(breed => {
-      const li = document.createElement('li')
-      li.innerText = `${breed}`
-      li.addEventListener('click', function (e) {
-          e.target.style.color = "firebrick"
-      })
+      const li = creatingLi(breed)
       breeds_ul.appendChild(li)
     })
     dropdown.addEventListener('change', function (e) {
-        while( breeds_ul.firstChild ){
-            breeds_ul.removeChild( breeds_ul.firstChild )
-        }
+        removingChildren(breeds_ul)
         breedsArray.forEach(breed => {
             if(breed[0] === e.target.value){
-                const li = document.createElement('li')
-                li.innerText = `${breed}`
-                li.addEventListener('click', updateColor)
+                const li = creatingLi(breed)
                 breeds_ul.appendChild(li)
             }
         })
