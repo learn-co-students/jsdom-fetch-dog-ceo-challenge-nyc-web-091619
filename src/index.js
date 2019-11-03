@@ -10,12 +10,8 @@
 
 document.addEventListener('DOMContentLoaded', function() {
   fetchDogs();
-  fetchBreeds();
-  addColorClick();
-  // liArray.forEach(function(element) {
-  //   element.addEventListener('click', event => {
-  //     console.log("click", self, event, event.detail);
-  })
+  fetchBreeds(); 
+});
 
 
 
@@ -65,8 +61,8 @@ function addImageToDOM(dogPictureURL) {
   dogImgDivContainer.appendChild(newImageElement);
 }
 
+const letterSet = new Set();
 
-<<<<<<< HEAD
 function fetchBreeds() {
   const breedUrl = 'https://dog.ceo/api/breeds/list/all'
   let dogBreedContainer = document.getElementById("dog-breeds");
@@ -74,22 +70,63 @@ function fetchBreeds() {
   fetch(breedUrl)
   .then(resp => resp.json())
   .then(json => {
-    // console.log(typeof(json.message))
     for (var breed in json.message) {
       let newBreedListItem = document.createElement("li");
       newBreedListItem.innerText = breed;
+      newBreedListItem.addEventListener('click', event => {
+        if (event.target.style.color !== "orange" ) {
+          event.target.style.color = "orange"
+        }
+        else {
+          event.target.style.color = "black";
+        }
+      })
+      let breedDropdown = document.getElementById("breed-dropdown")
+      let allBreeds = document.getElementById("dog-breeds").children
+      // drop all child nodes, removing a,b,c,d option items
+      breedDropdown.innerHTML = ""
+
+      for (let i = 0; i < allBreeds.length; i++) {
+        letterSet.add(document.getElementById("dog-breeds").children[i].innerText[0])
+      } 
       dogBreedContainer.appendChild(newBreedListItem);
       
     }
-  })
-}
 
-function addColorClick() {
-  let liArray = document.getElementById("dog-breeds").children;
-  console.log(Object.keys(liArray))
+    function addLetter(letter) {
+      let opt = document.createElement('option');
+
+      opt.appendChild(document.createTextNode(letter));
+      opt.value = letter;
+      document.getElementById("breed-dropdown").appendChild(opt);
+    }
+
+    letterSet.forEach(addLetter);
+
+    document.getElementById("breed-dropdown").addEventListener("change", function() {
+      let searchLetter = event.target.value;
+      for (i=0; i< document.getElementById("dog-breeds").children.length; i++) {
+        if (document.getElementById("dog-breeds").children[i].innerHTML[0] === searchLetter) {
+          showBreed(document.getElementById("dog-breeds").children[i]);
+        }
+        else {
+          hideBreed(document.getElementById("dog-breeds").children[i]);
+        }
+      }
+    });
+
+    function hideBreed(link) {
+      link.style.display = "none";
+    }
+
+    function showBreed(link) {
+      link.removeAttribute("style");
+    }
+
+  })
   
-  // for (var li in liArray) {
-  //   console.log(li[0].textContent);
-  // }
+  
+  
+  
 }
 
