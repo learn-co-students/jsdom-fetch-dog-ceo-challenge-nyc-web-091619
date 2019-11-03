@@ -66,6 +66,7 @@ function addImageToDOM(dogPictureURL) {
 }
 
 
+<<<<<<< HEAD
 function fetchBreeds() {
   const breedUrl = 'https://dog.ceo/api/breeds/list/all'
   let dogBreedContainer = document.getElementById("dog-breeds");
